@@ -1,23 +1,28 @@
 # Reboot required
 
-This program checks for a need to reboot on Ubuntu and Red Hat-based systems. If there are any updates applied for the kernel, it lets you know if a reboot is required.
+This program checks for the need to reboot on Ubuntu and Red Hat-based systems. If there are any updates applied to the kernel, it lets you know if a reboot is required.
 
 By default it only tells you if a reboot is required or not. The verbose mode displays all packages causing the required reboot.
 
+## Usage
+
+```bash
+Usage: rr [OPTIONS]
+
+-h, --help                Show this help
+-v, --verbose             Packages causing the need to reboot
+    --version             Print version
+```
+
 ## Install
 
-### Mac
-
-via Homebrew:
+- Homebrew:
 
 ```shell
 brew install dev01d/tap/reboot-required
 ```
 
-## Linux
-
-- APT
-
+- Apt
 <!-- /* spellchecker: disable */ -->
 
 ```shell
@@ -34,7 +39,7 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/dev01
 sudo apt-get update; sudo apt install reboot-required
 ```
 
-- YUM
+- Yum
 
 ```shell
 sudo echo """\
