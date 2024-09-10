@@ -1,0 +1,17 @@
+version: "3"
+
+tasks:
+  default:
+    cmds:
+      - task: run
+
+  run:
+    cmds:
+      - go run main.go
+
+  build:
+    env:
+      GOOS: linux
+      GOARCH: amd64
+    cmds:
+      - go build

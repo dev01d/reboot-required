@@ -1,0 +1,66 @@
+version: 2
+
+before:
+  hooks:
+    - go mod download
+builds:
+  - main: .
+    binary: rr
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+    env:
+      - CGO_ENABLED=0
+archives:
+  - name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else }}{{ .Arch }}{{ end }}
+
+checksum:
+  name_template: "checksums.txt"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^Docs:"
+      - "^test:"
+      - "^Test:"
+      - "^ci:"
+      - "^CI:"
+      - Merge pull request
+      - Merge branch
+      - go mod tidy
+brews:
+  - repository:
+      owner: dev01d
+      name: homebrew-tap
+      token: "{{ .Env.TAP_GITHUB_TOKEN }}"
+    directory: Formula
+    homepage: https://github.com/dev01d/reboot-required
+    description: Check if a reboot is required
+    skip_upload: auto
+    test: |
+      system "#{bin}/rr --version"
+nfpms:
+  - id: packages
+    maintainer: Jason Behnke <jason@jasonbehnke.io>
+    homepage: https://github.com/dev01d/reboot-required
+    description: Check if a reboot is required
+    license: MIT
+    formats:
+      - deb
+      - rpm
+    file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+publishers:
+  - name: fury.io
+    ids:
+      - packages
+    dir: "{{ dir .ArtifactPath }}"
+    cmd: curl -F package=@{{ .ArtifactName }} https://{{ .Env.FURY_TOKEN }}@push.fury.io/dev01d/
